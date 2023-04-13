@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <iostream>
 #include <memory>
 
 class Game
@@ -11,8 +12,11 @@ private:
     sf::VideoMode videoMode;
     sf::Event event;
 
+    sf::RectangleShape enemy;
+
     void InitializeVariables();
     void InitializeWindow();
+    void InitializeEnemy();
 
 public:
     Game();

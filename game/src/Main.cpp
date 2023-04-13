@@ -1,39 +1,17 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
+#include "Game.h"
 
 int main()
 {
-    // Windows
-    sf::RenderWindow window(sf::VideoMode(640, 480),
-                            "SFML Game Sample",
-                            sf::Style::Titlebar | sf::Style::Close);
-    sf::Event event;
+    Game game;
 
     // Game loop
-    while (window.isOpen())
+    while (game.GetWindowIsOpen())
     {
-        // Event polling
-        while (window.pollEvent(event))
-        {
-            switch (event.type)
-            {
-                case sf::Event::Closed:
-                    window.close();
-                    break;
-                case sf::Event::KeyPressed:
-                    if (event.key.code == sf::Keyboard::Escape)
-                    {
-                        window.close();
-                    }
-                    break;
-            }
-        }
-
         // Update
-        window.clear(sf::Color::Blue);  // clear old frame
+        game.Update();
 
         // Render
-        window.display();  // tell app that window is done drawing
+        game.Render();
     }
 
     return 0;

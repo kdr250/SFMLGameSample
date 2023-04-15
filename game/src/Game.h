@@ -4,6 +4,7 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 #include <memory>
+#include <vector>
 
 class Game
 {
@@ -12,6 +13,14 @@ private:
     sf::VideoMode videoMode;
     sf::Event event;
 
+    sf::Vector2i mousePositionWindow;
+
+    int points;
+    float enemySpawnTimer;
+    float enemySpawnTimerMax;
+    int maxEnemies;
+
+    std::vector<sf::RectangleShape> enemies;
     sf::RectangleShape enemy;
 
     void InitializeVariables();
@@ -27,4 +36,8 @@ public:
     void PollEvent();
     void Update();
     void Render();
+    void UpdateMousePosition();
+    void SpawnEnemy();
+    void UpdateEnemies();
+    void RenderEnemies();
 };

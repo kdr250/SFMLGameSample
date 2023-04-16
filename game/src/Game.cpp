@@ -1,6 +1,12 @@
 #include "Game.h"
 
-void Game::InitializeVariables() {}
+void Game::InitializeVariables()
+{
+    this->points             = 0;
+    this->enemySpawnTimerMax = 1000.0f;
+    this->enemySpawnTimer    = this->enemySpawnTimerMax;
+    this->maxEnemies         = 5;
+}
 
 void Game::InitializeWindow()
 {
@@ -58,16 +64,59 @@ void Game::PollEvent()
 void Game::Update()
 {
     this->PollEvent();
-
-    std::cout << "Mouse Pos (Relative to the screen): " << sf::Mouse::getPosition().x << " "
-              << sf::Mouse::getPosition().y << " | "
-              << "Mouse Pos (Relative to the window): " << sf::Mouse::getPosition(*this->window).x
-              << " " << sf::Mouse::getPosition(*this->window).y << std::endl;
+    this->UpdateMousePosition();
+    this->UpdateEnemies();
 }
 
 void Game::Render()
 {
     this->window->clear();
-    this->window->draw(this->enemy);
+    this->RenderEnemies();
     this->window->display();
+}
+
+void Game::UpdateMousePosition()
+{
+    // Mouse position relative to window
+    this->mousePositionWindow = sf::Mouse::getPosition(*this->window);
+}
+
+void Game::SpawnEnemy()
+{
+    int maxX = static_cast<int>(this->window->getSize().x - this->enemy.getSize().x);
+    float x  = static_cast<float>(rand() % maxX);
+    float y  = 0.0f;
+    this->enemy.setPosition(x, y);
+    this->enemy.setFillColor(sf::Color::Green);
+    this->enemies.push_back(this->enemy);
+}
+
+void Game::UpdateEnemies()
+{
+    if (this->enemies.size() >= this->maxEnemies)
+    {
+        return;
+    }
+    if (this->enemySpawnTimer >= this->enemySpawnTimerMax)
+    {
+        this->SpawnEnemy();
+        this->enemySpawnTimer = 0.0f;
+    }
+    else
+    {
+        this->enemySpawnTimer += 1.0f;
+    }
+
+    for (auto& enemy : this->enemies)
+    {
+        enemy.move(0.0f, 0.5f);
+    }
+}
+
+void Game::RenderEnemies()
+{
+    for (auto& enemy : this->enemies)
+    {
+        this->window->draw(enemy);
+    }
 }

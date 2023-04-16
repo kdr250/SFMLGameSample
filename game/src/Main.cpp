@@ -7,7 +7,7 @@ int main()
     Game game;
 
     // Game loop
-    while (game.GetWindowIsOpen())
+    while (game.IsRunning() && !game.GetEndGame())
     {
         // Update
         game.Update();

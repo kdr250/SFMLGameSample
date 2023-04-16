@@ -3,9 +3,9 @@
 void Game::InitializeVariables()
 {
     this->points             = 0;
-    this->enemySpawnTimerMax = 1000.0f;
+    this->enemySpawnTimerMax = 10.0f;
     this->enemySpawnTimer    = this->enemySpawnTimerMax;
-    this->maxEnemies         = 5;
+    this->maxEnemies         = 10;
 }
 
 void Game::InitializeWindow()
@@ -15,7 +15,7 @@ void Game::InitializeWindow()
     this->window           = std::make_unique<sf::RenderWindow>(this->videoMode,
                                                       "Game1",
                                                       (sf::Style::Titlebar | sf::Style::Close));
-    this->window->setFramerateLimit(144);
+    this->window->setFramerateLimit(60);
 }
 
 void Game::InitializeEnemy()
@@ -79,6 +79,7 @@ void Game::UpdateMousePosition()
 {
     // Mouse position relative to window
     this->mousePositionWindow = sf::Mouse::getPosition(*this->window);
+    this->mousePositionView   = this->window->mapPixelToCoords(this->mousePositionWindow);
 }
 
 void Game::SpawnEnemy()
@@ -93,23 +94,41 @@ void Game::SpawnEnemy()
 
 void Game::UpdateEnemies()
 {
-    if (this->enemies.size() >= this->maxEnemies)
+    if (this->enemies.size() < this->maxEnemies)
     {
-        return;
-    }
-    if (this->enemySpawnTimer >= this->enemySpawnTimerMax)
-    {
-        this->SpawnEnemy();
-        this->enemySpawnTimer = 0.0f;
-    }
-    else
-    {
-        this->enemySpawnTimer += 1.0f;
+        if (this->enemySpawnTimer >= this->enemySpawnTimerMax)
+        {
+            this->SpawnEnemy();
+            this->enemySpawnTimer = 0.0f;
+        }
+        else
+        {
+            this->enemySpawnTimer += 1.0f;
+        }
     }
 
-    for (auto& enemy : this->enemies)
+    for (int i = 0; i < this->enemies.size(); i++)
     {
-        enemy.move(0.0f, 0.5f);
+        bool shouldDelete = false;
+        this->enemies[i].move(0.0f, 3.0f);
+
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            if (this->enemies[i].getGlobalBounds().contains(this->mousePositionView))
+            {
+                shouldDelete = true;
+                this->points += 10.0f;
+            }
+        }
+        if (this->enemies[i].getPosition().y > this->window->getSize().y)
+        {
+            shouldDelete = true;
+        }
+
+        if (shouldDelete)
+        {
+            this->enemies.erase(this->enemies.begin() + i);
+        }
     }
 }
 

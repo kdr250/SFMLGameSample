@@ -15,6 +15,7 @@ private:
     sf::Event event;
 
     sf::Vector2i mousePositionWindow;
+    sf::Vector2f mousePositionView;
 
     int points;
     float enemySpawnTimer;

@@ -6,6 +6,7 @@ void Game::InitializeVariables()
     this->enemySpawnTimerMax = 10.0f;
     this->enemySpawnTimer    = this->enemySpawnTimerMax;
     this->maxEnemies         = 10;
+    this->mouseHeld          = false;
 }
 
 void Game::InitializeWindow()
@@ -112,23 +113,32 @@ void Game::UpdateEnemies()
         bool shouldDelete = false;
         this->enemies[i].move(0.0f, 3.0f);
 
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-        {
-            if (this->enemies[i].getGlobalBounds().contains(this->mousePositionView))
-            {
-                shouldDelete = true;
-                this->points += 10.0f;
-            }
-        }
         if (this->enemies[i].getPosition().y > this->window->getSize().y)
-        {
-            shouldDelete = true;
-        }
-
-        if (shouldDelete)
         {
             this->enemies.erase(this->enemies.begin() + i);
         }
+    }
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    {
+        if (!this->mouseHeld)
+        {
+            this->mouseHeld   = true;
+            bool shouldDelete = false;
+            for (int i = 0; i < this->enemies.size(); i++)
+            {
+                if (this->enemies[i].getGlobalBounds().contains(this->mousePositionView))
+                {
+                    shouldDelete = true;
+                    this->enemies.erase(this->enemies.begin() + i);
+                    this->points += 10.0f;
+                }
+            }
+        }
+    }
+    else
+    {
+        this->mouseHeld = false;
     }
 }
 

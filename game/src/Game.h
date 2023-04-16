@@ -17,10 +17,11 @@ private:
     sf::Vector2i mousePositionWindow;
     sf::Vector2f mousePositionView;
 
-    int points;
+    unsigned points;
     float enemySpawnTimer;
     float enemySpawnTimerMax;
     int maxEnemies;
+    bool mouseHeld;
 
     std::vector<sf::RectangleShape> enemies;
     sf::RectangleShape enemy;

@@ -7,6 +7,7 @@ void Game::InitializeVariables()
     this->enemySpawnTimer    = this->enemySpawnTimerMax;
     this->maxEnemies         = 10;
     this->mouseHeld          = false;
+    this->health             = 10;
 }
 
 void Game::InitializeWindow()
@@ -38,9 +39,14 @@ Game::Game()
 
 Game::~Game() {}
 
-const bool Game::GetWindowIsOpen() const
+const bool Game::IsRunning() const
 {
     return this->window->isOpen();
+}
+
+const bool Game::GetEndGame() const
+{
+    return this->endGame;
 }
 
 void Game::PollEvent()
@@ -65,8 +71,15 @@ void Game::PollEvent()
 void Game::Update()
 {
     this->PollEvent();
-    this->UpdateMousePosition();
-    this->UpdateEnemies();
+    if (!this->endGame)
+    {
+        this->UpdateMousePosition();
+        this->UpdateEnemies();
+    }
+    if (this->health <= 0)
+    {
+        this->endGame = true;
+    }
 }
 
 void Game::Render()
@@ -116,6 +129,8 @@ void Game::UpdateEnemies()
         if (this->enemies[i].getPosition().y > this->window->getSize().y)
         {
             this->enemies.erase(this->enemies.begin() + i);
+            this->health -= 1;
+            std::cout << "Health: " << this->health << std::endl;
         }
     }
 
@@ -132,6 +147,7 @@ void Game::UpdateEnemies()
                     shouldDelete = true;
                     this->enemies.erase(this->enemies.begin() + i);
                     this->points += 10.0f;
+                    std::cout << "Points: " << this->points << std::endl;
                 }
             }
         }

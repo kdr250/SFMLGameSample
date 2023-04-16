@@ -81,7 +81,15 @@ void Game::UpdateMousePosition()
     this->mousePositionWindow = sf::Mouse::getPosition(*this->window);
 }
 
-void Game::SpawnEnemy() {}
+void Game::SpawnEnemy()
+{
+    int maxX = static_cast<int>(this->window->getSize().x - this->enemy.getSize().x);
+    float x  = static_cast<float>(rand() % maxX);
+    float y  = 0.0f;
+    this->enemy.setPosition(x, y);
+    this->enemy.setFillColor(sf::Color::Green);
+    this->enemies.push_back(this->enemy);
+}
 
 void Game::UpdateEnemies()
 {
@@ -98,6 +106,17 @@ void Game::UpdateEnemies()
     {
         this->enemySpawnTimer += 1.0f;
     }
+
+    for (auto& enemy : this->enemies)
+    {
+        enemy.move(0.0f, 0.5f);
+    }
 }
 
-void Game::RenderEnemies() {}
+void Game::RenderEnemies()
+{
+    for (auto& enemy : this->enemies)
+    {
+        this->window->draw(enemy);
+    }
+}

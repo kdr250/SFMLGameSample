@@ -9,7 +9,6 @@ private:
     sf::RectangleShape shape;
     int hp;
     int hpMax;
-    int points;
 
     float movementSpeed;
 

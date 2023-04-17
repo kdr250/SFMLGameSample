@@ -2,19 +2,7 @@
 
 int main()
 {
-    std::srand(static_cast<unsigned>(time(NULL)));
-
-    Game game;
-
-    // Game loop
-    while (game.IsRunning() && !game.GetEndGame())
-    {
-        // Update
-        game.Update();
-
-        // Render
-        game.Render();
-    }
+    srand(static_cast<unsigned>(time(0)));
 
     return 0;
 }

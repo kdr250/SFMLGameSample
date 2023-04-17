@@ -3,6 +3,9 @@
 void Player::InitializeVariables()
 {
     this->movementSpeed = 10.0f;
+    this->hpMax         = 10;
+    this->hp            = this->hpMax;
+    this->points        = 0;
 }
 
 void Player::InitializeShape()
@@ -73,4 +76,9 @@ void Player::Update(std::unique_ptr<sf::RenderWindow>& window)
 void Player::Render(sf::RenderTarget& target)
 {
     target.draw(this->shape);
+}
+
+const sf::RectangleShape& Player::GetShape() const
+{
+    return this->shape;
 }

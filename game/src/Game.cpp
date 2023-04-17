@@ -54,6 +54,19 @@ void Game::Update()
     this->PollEvent();
     this->SpawnSwagBalls();
     this->player.Update(this->window);
+    this->UpdateCollision();
+}
+
+void Game::UpdateCollision()
+{
+    for (size_t i = 0; i < this->swagBalls.size(); i++)
+    {
+        if (this->player.GetShape().getGlobalBounds().intersects(
+                this->swagBalls[i].GetShape().getGlobalBounds()))
+        {
+            this->swagBalls.erase(this->swagBalls.begin() + i);
+        }
+    }
 }
 
 void Game::Render()

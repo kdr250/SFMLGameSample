@@ -40,10 +40,34 @@ void Player::UpdateInput()
     }
 }
 
+void Player::UpdateWindowBoundsCollision(const std::unique_ptr<sf::RenderWindow>& window)
+{
+    sf::FloatRect playerBounds = this->shape.getGlobalBounds();
+    float x                    = playerBounds.left;
+    float y                    = playerBounds.top;
+    if (playerBounds.left <= 0.0f)
+    {
+        x = 0.0f;
+    }
+    else if (playerBounds.left + playerBounds.width >= window->getSize().x)
+    {
+        x = window->getSize().x - playerBounds.width;
+    }
+    if (playerBounds.top <= 0.0f)
+    {
+        y = 0.0f;
+    }
+    else if (playerBounds.top + playerBounds.height >= window->getSize().y)
+    {
+        y = window->getSize().y - playerBounds.height;
+    }
+    this->shape.setPosition(x, y);
+}
+
 void Player::Update(std::unique_ptr<sf::RenderWindow>& window)
 {
-    // Window collision
     this->UpdateInput();
+    this->UpdateWindowBoundsCollision(window);
 }
 
 void Player::Render(sf::RenderTarget& target)

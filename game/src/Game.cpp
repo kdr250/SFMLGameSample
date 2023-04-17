@@ -19,6 +19,38 @@ Game::Game()
 
 Game::~Game() {}
 
-void Game::Update() {}
+const bool Game::IsRunning() const
+{
+    return this->window->isOpen();
+}
 
-void Game::Render() {}
+void Game::PollEvent()
+{
+    while (this->window->pollEvent(this->event))
+    {
+        switch (this->event.type)
+        {
+            case sf::Event::Closed:
+                this->window->close();
+                break;
+            case sf::Event::KeyPressed:
+                if (this->event.key.code == sf::Keyboard::Escape)
+                {
+                    this->window->close();
+                }
+                break;
+        }
+    }
+}
+
+void Game::Update()
+{
+    this->PollEvent();
+}
+
+void Game::Render()
+{
+    this->window->clear();
+    this->player.Render(*this->window);
+    this->window->display();
+}

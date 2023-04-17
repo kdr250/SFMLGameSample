@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "Player.h"
+#include "SwagBall.h"
 
 class Game
 {
@@ -15,6 +16,11 @@ private:
     sf::Event event;
 
     Player player;
+
+    std::vector<SwagBall> swagBalls;
+    float spawnTimerMax;
+    float spawnTimer;
+    int maxSwagBalls;
 
     void InitializeVariables();
     void InitializeWindow();
@@ -28,4 +34,6 @@ public:
 
     void Update();
     void Render();
+
+    void SpawnSwagBalls();
 };

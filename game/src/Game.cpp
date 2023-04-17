@@ -5,10 +5,10 @@ void Game::InitializeVariables() {}
 void Game::InitializeWindow()
 {
     this->videoMode = sf::VideoMode(800, 600);
-
-    this->window = std::make_unique<sf::RenderWindow>(this->videoMode,
+    this->window    = std::make_unique<sf::RenderWindow>(this->videoMode,
                                                       "Game2",
                                                       sf::Style::Close | sf::Style::Titlebar);
+    this->window->setFramerateLimit(60.0f);
 }
 
 Game::Game()
@@ -46,6 +46,7 @@ void Game::PollEvent()
 void Game::Update()
 {
     this->PollEvent();
+    this->player.Update(this->window);
 }
 
 void Game::Render()

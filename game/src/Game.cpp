@@ -20,6 +20,22 @@ void Game::InitializeWindow()
     this->window->setFramerateLimit(60);
 }
 
+void Game::InitializeFont()
+{
+    if (!this->font.loadFromFile("asset/font/Dosis-Light.ttf"))
+    {
+        std::cout << "Error: failed to load font!";
+    }
+}
+
+void Game::InitializeText()
+{
+    this->uiText.setFont(this->font);
+    this->uiText.setCharacterSize(32);
+    this->uiText.setFillColor(sf::Color::White);
+    this->uiText.setString("NONE");
+}
+
 void Game::InitializeEnemy()
 {
     this->enemy.setPosition(sf::Vector2f(100.0f, 100.0f));
@@ -34,6 +50,8 @@ Game::Game()
 {
     this->InitializeVariables();
     this->InitializeWindow();
+    this->InitializeFont();
+    this->InitializeText();
     this->InitializeEnemy();
 }
 
@@ -80,12 +98,14 @@ void Game::Update()
     {
         this->endGame = true;
     }
+    this->UpdateText();
 }
 
 void Game::Render()
 {
     this->window->clear();
-    this->RenderEnemies();
+    this->RenderEnemies(*this->window);
+    this->RenderText(*this->window);
     this->window->display();
 }
 
@@ -158,10 +178,23 @@ void Game::UpdateEnemies()
     }
 }
 
-void Game::RenderEnemies()
+void Game::RenderEnemies(sf::RenderTarget& target)
 {
     for (auto& enemy : this->enemies)
     {
-        this->window->draw(enemy);
+        target.draw(enemy);
     }
+}
+
+void Game::RenderText(sf::RenderTarget& target)
+{
+    target.draw(this->uiText);
+}
+
+void Game::UpdateText()
+{
+    std::stringstream ss;
+    ss << "Points: " << this->points << std::endl;
+    ss << "Health: " << this->health << std::endl;
+    this->uiText.setString(ss.str());
 }

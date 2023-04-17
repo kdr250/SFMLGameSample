@@ -33,6 +33,7 @@ public:
     void PollEvent();
 
     void Update();
+    void UpdateCollision();
     void Render();
 
     void SpawnSwagBalls();

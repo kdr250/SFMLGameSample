@@ -16,4 +16,6 @@ public:
 
     void Update();
     void Render(sf::RenderTarget& target);
+
+    const sf::CircleShape& GetShape() const;
 };

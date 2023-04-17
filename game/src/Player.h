@@ -8,13 +8,16 @@ class Player
 private:
     sf::RectangleShape shape;
 
+    float movementSpeed;
+
     void InitializeVariables();
     void InitializeShape();
 
 public:
-    Player();
+    Player(float x = 0.0f, float y = 0.0f);
     ~Player();
 
-    void Update();
+    void UpdateInput();
+    void Update(std::unique_ptr<sf::RenderWindow>& window);
     void Render(sf::RenderTarget& target);
 };

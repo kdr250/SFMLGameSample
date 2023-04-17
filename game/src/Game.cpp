@@ -6,6 +6,7 @@ void Game::InitializeVariables()
     this->spawnTimerMax = 10.0f;
     this->spawnTimer    = this->spawnTimerMax;
     this->maxSwagBalls  = 10;
+    this->points        = 0;
 }
 
 void Game::InitializeWindow()
@@ -17,10 +18,28 @@ void Game::InitializeWindow()
     this->window->setFramerateLimit(60);
 }
 
+void Game::InitializeFont()
+{
+    if (!this->font.loadFromFile("asset/font/PixellettersFull.ttf"))
+    {
+        std::cout << "Error: Could not load font!" << std::endl;
+    }
+}
+
+void Game::InitializeText()
+{
+    this->uiText.setFont(this->font);
+    this->uiText.setCharacterSize(32);
+    this->uiText.setPosition(0.0f, 0.0f);
+    this->uiText.setString("NONE");
+}
+
 Game::Game()
 {
     this->InitializeVariables();
     this->InitializeWindow();
+    this->InitializeFont();
+    this->InitializeText();
 }
 
 Game::~Game() {}
@@ -55,6 +74,7 @@ void Game::Update()
     this->SpawnSwagBalls();
     this->player.Update(this->window);
     this->UpdateCollision();
+    this->UpdateGui();
 }
 
 void Game::UpdateCollision()
@@ -65,8 +85,16 @@ void Game::UpdateCollision()
                 this->swagBalls[i].GetShape().getGlobalBounds()))
         {
             this->swagBalls.erase(this->swagBalls.begin() + i);
+            this->points++;
         }
     }
+}
+
+void Game::UpdateGui()
+{
+    std::stringstream ss;
+    ss << "- Points: " << this->points;
+    this->uiText.setString(ss.str());
 }
 
 void Game::Render()
@@ -77,7 +105,13 @@ void Game::Render()
     {
         ball.Render(*this->window);
     }
+    this->RenderGui(*this->window);
     this->window->display();
+}
+
+void Game::RenderGui(sf::RenderTarget& target)
+{
+    target.draw(this->uiText);
 }
 
 void Game::SpawnSwagBalls()

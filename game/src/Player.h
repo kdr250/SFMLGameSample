@@ -25,4 +25,9 @@ public:
     void Render(sf::RenderTarget& target);
 
     const sf::RectangleShape& GetShape() const;
+    const int& GetHp() const;
+    const int& GetHpMax() const;
+
+    void TakeDamage(const int damage);
+    void GainHealth(const int health);
 };

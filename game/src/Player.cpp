@@ -81,3 +81,37 @@ const sf::RectangleShape& Player::GetShape() const
 {
     return this->shape;
 }
+
+const int& Player::GetHp() const
+{
+    return this->hp;
+}
+
+const int& Player::GetHpMax() const
+{
+    return this->hpMax;
+}
+
+void Player::TakeDamage(const int damage)
+{
+    if (this->hp > 0)
+    {
+        this->hp -= damage;
+    }
+    if (this->hp < 0)
+    {
+        this->hp = 0;
+    }
+}
+
+void Player::GainHealth(const int health)
+{
+    if (this->hp < this->hpMax)
+    {
+        this->hp += health;
+    }
+    if (this->hp > this->hpMax)
+    {
+        this->hp = this->hpMax;
+    }
+}

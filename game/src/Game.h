@@ -17,6 +17,7 @@ private:
     sf::Event event;
     sf::Font font;
     sf::Text uiText;
+    sf::Text endGameText;
 
     Player player;
 
@@ -36,14 +37,18 @@ public:
     Game();
     ~Game();
 
-    const bool IsRunning() const;
+    const bool& IsRunning() const;
+
     void PollEvent();
 
     void Update();
+    void UpdatePlayer();
     void UpdateCollision();
     void UpdateGui();
     void Render();
     void RenderGui(sf::RenderTarget& target);
 
     void SpawnSwagBalls();
+
+    const int RandomBallType() const;
 };

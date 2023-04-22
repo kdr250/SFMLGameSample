@@ -32,6 +32,12 @@ void Game::InitializeText()
     this->uiText.setCharacterSize(32);
     this->uiText.setPosition(0.0f, 0.0f);
     this->uiText.setString("NONE");
+
+    this->endGameText.setFont(this->font);
+    this->endGameText.setCharacterSize(64);
+    this->endGameText.setFillColor(sf::Color::Red);
+    this->endGameText.setPosition(sf::Vector2f(20, 100));
+    this->endGameText.setString("Game Over !");
 }
 
 Game::Game()
@@ -44,9 +50,9 @@ Game::Game()
 
 Game::~Game() {}
 
-const bool Game::IsRunning() const
+const bool& Game::IsRunning() const
 {
-    return this->window->isOpen();
+    return this->window->isOpen();  // && !this->endGame;
 }
 
 void Game::PollEvent()
@@ -71,10 +77,24 @@ void Game::PollEvent()
 void Game::Update()
 {
     this->PollEvent();
+
+    if (this->endGame)
+        return;
+
     this->SpawnSwagBalls();
-    this->player.Update(this->window);
+    this->UpdatePlayer();
     this->UpdateCollision();
     this->UpdateGui();
+}
+
+void Game::UpdatePlayer()
+{
+    this->player.Update(this->window);
+
+    if (this->player.GetHp() <= 0)
+    {
+        this->endGame = true;
+    }
 }
 
 void Game::UpdateCollision()
@@ -90,7 +110,7 @@ void Game::UpdateCollision()
                     this->points++;
                     break;
                 case SwagBallTypes::DAMAGING:
-                    this->player.TakeDamage(1);
+                    this->player.TakeDamage(4);
                     break;
                 case SwagBallTypes::HEALING:
                     this->player.GainHealth(1);
@@ -118,6 +138,12 @@ void Game::Render()
         ball.Render(*this->window);
     }
     this->RenderGui(*this->window);
+
+    if (this->endGame)
+    {
+        this->window->draw(this->endGameText);
+    }
+
     this->window->display();
 }
 

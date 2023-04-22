@@ -136,8 +136,24 @@ void Game::SpawnSwagBalls()
     {
         if (this->swagBalls.size() < this->maxSwagBalls)
         {
-            this->swagBalls.push_back(SwagBall(*this->window, rand() % SwagBallTypes::NROFTYPES));
+            this->swagBalls.push_back(SwagBall(*this->window, this->RandomBallType()));
         }
         this->spawnTimer = 0.0f;
     }
+}
+
+const int Game::RandomBallType() const
+{
+    int type        = SwagBallTypes::DEFAULT;
+    int randomValue = rand() % 100 + 1;
+
+    if (randomValue > 60 && randomValue <= 80)
+    {
+        type = SwagBallTypes::DAMAGING;
+    }
+    else if (randomValue > 80 && randomValue <= 100)
+    {
+        type = SwagBallTypes::HEALING;
+    }
+    return type;
 }

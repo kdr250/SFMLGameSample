@@ -46,4 +46,6 @@ public:
     void RenderGui(sf::RenderTarget& target);
 
     void SpawnSwagBalls();
+
+    const int RandomBallType() const;
 };
